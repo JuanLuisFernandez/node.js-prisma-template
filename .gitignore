@@ -1,0 +1,6 @@
+.nvmrc
+node_modules
+.env
+postgres/
+
+/src/generated/prisma
