@@ -1,32 +1,20 @@
-import { PrismaClient } from '@prisma/client'
+import { envs } from './config/envs';
+import { AppRoutes } from './presentation/routes';
+import { Server } from './presentation/server';
 
-const prisma = new PrismaClient()
+(async () => {
+  main();
+})();
 
 async function main() {
-  const newKurs = await prisma.kurs.create({
-    data: {
-      title: 'Curso de Node.js con Prisma',
-      description: 'Aprende a usar Prisma con Node.js de forma práctica.',
-      isClassroom: true,
-      isOnline: false,
-      startDate: new Date('2025-07-01T09:00:00Z'),
-      endDate: new Date('2025-07-15T17:00:00Z'),
-      duration: '2 semanas',
-      minParticipants: 5,
-      maxParticipants: 20,
-      price: 150,
-      book: 'Manual oficial de Prisma',
-    },
-  })
 
-  console.log('Curso creado:', newKurs)
+  const server = new Server({
+    port: envs.PORT,
+    public_path: envs.PUBLIC_PATH,
+    routes: AppRoutes.routes,
+  });
+
+  server.start();
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
 
